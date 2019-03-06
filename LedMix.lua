@@ -11,7 +11,17 @@ function LedMix:new(o)
   --]]--
   o.stop_after   = o.stop_after   or false
   o.strip_size   = o.strip_size   or 50   -- # LEDs
-  o.refresh_rate = o.refresh_rate or 200  -- Hz
+  o.refresh_rate = o.refresh_rate or 180  -- Hz / fps
+  --[[
+    At 180 Hz, the following dividers yield frame rates:
+    
+    Divider 1 -> 180 Hz
+            2 ->  90
+            3 ->  60
+            4 ->  45
+            5 ->  36
+            6 ->  30
+  --]]--
 
   o.animations   = {}
   o.buffer = ws2812.newBuffer(o.strip_size, 3)
@@ -20,7 +30,7 @@ function LedMix:new(o)
 
   o.timer = tmr.create()
 
-  --[[ 
+  --[[  auto-loading
   if(#o.load_from > 0) then  -- autoload at random if setup
     for i=1, o.auto_load do
       table.insert(o.animations,
